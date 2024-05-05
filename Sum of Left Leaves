@@ -1,0 +1,32 @@
+/**
+ * Definition for binary tree
+ * class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) {
+ *      val = x;
+ *      left=null;
+ *      right=null;
+ *     }
+ * }
+ */
+public class Solution {
+    public int helper(TreeNode A){
+        if(A == null){
+            return 0;
+        }
+        int ans = 0;
+        if(A.left != null && A.left.left == null && A.left.right == null){
+            ans += A.left.val;
+        }
+        else{
+            ans += helper(A.left);
+        }
+        ans += helper(A.right);
+        return ans;
+    }
+    public int solve(TreeNode A) {
+        return helper(A);
+    }
+}
