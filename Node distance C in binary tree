@@ -1,0 +1,71 @@
+/**
+ * Definition for binary tree
+ * class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) {
+ *      val = x;
+ *      left=null;
+ *      right=null;
+ *     }
+ * }
+ */
+public class Solution {
+
+    public ArrayList<Integer> solve(TreeNode A, int B, int C) {
+        ArrayList<TreeNode> listofNodes = new ArrayList<>();
+        ArrayList<TreeNode> path = new ArrayList<>();
+        // Get path from root to source
+        if(buildPath(A, B, listofNodes) == true)
+        path = listofNodes;
+        // Get the path again back from source to root
+        Collections.reverse(path);
+       
+        ArrayList<Integer> ans = new ArrayList<>();
+        // We have the path from source --> root in path[]
+        below(path.get(0), C, ans);
+        for(int i=1; i < path.size(); i++){
+            // Node at path[i] is at distance k-1
+            if(C-i == 0){
+                ans.add(path.get(i).val);
+                break;
+            }
+            //Node at path[i], child is at path[i-1]
+            if(path.get(i).left.equals(path.get(i-1))){
+                below(path.get(i).right, C-i-1, ans);
+            }else{
+                below(path.get(i).left, C-i-1, ans);
+            }
+        }
+    return ans;
+    }
+
+    public static boolean buildPath(TreeNode root, int K,ArrayList<TreeNode> listofNodes){
+        if(root == null){
+            return false;
+        }
+        listofNodes.add(root);
+        if(root.val == K){
+            return true;
+        }
+        if(buildPath(root.left, K, listofNodes)  || buildPath(root.right, K, listofNodes)){
+            return true;
+        }
+        listofNodes.remove(listofNodes.size() - 1);
+        return false;
+    }
+   
+
+    public static void below(TreeNode root, int k, ArrayList<Integer> ans){
+        if(root == null){
+            return;
+        }
+        if(k == 0){
+            ans.add(root.val);
+        }
+        below(root.left, k-1, ans);
+        below(root.right, k-1, ans);
+        return ;
+    }
+}
